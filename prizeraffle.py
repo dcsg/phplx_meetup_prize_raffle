@@ -34,8 +34,12 @@ def get_attendees() -> list:
 
     event_id = input('What\'s the event id?\n')
 
-    endpoint_template = Template('http://api.meetup.com/$urlname/events/$eventid/rsvps?key=$key')
-    endpoint = endpoint_template.substitute(urlname=parameters['urlname'], eventid=event_id, key=parameters['key'])
+    endpoint_template = Template('http://api.meetup.com/$urlname/events/$eventid/rsvps?key=$apikey')
+    endpoint = endpoint_template.substitute(
+        urlname=parameters['url_name'],
+        eventid=event_id,
+        apikey=parameters['api_key']
+    )
 
     request = urllib.request.Request(endpoint)
     with urllib.request.urlopen(request) as response:
