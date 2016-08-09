@@ -31,7 +31,6 @@ def get_parameters() -> dict:
 
 def get_attendees() -> list:
     parameters = get_parameters()
-
     event_id = input('What\'s the event id?\n')
 
     endpoint_template = Template('http://api.meetup.com/$urlname/events/$eventid/rsvps?key=$apikey')
@@ -45,11 +44,11 @@ def get_attendees() -> list:
     with urllib.request.urlopen(request) as response:
         reader = codecs.getreader("utf-8")
         data = json.load(reader(response))
-        guests = []
-        for name in jmespath.search('[?response != `no`].[member.name]', data):
-            guests.append(name[0])
+        attendees = []
+        for attendee_name in jmespath.search('[?response != `no`].[member.name]', data):
+            attendees.append(attendee_name[0])
 
-        return guests
+        return attendees
 
 
 def prize_raffle():
@@ -59,8 +58,7 @@ def prize_raffle():
         accept = 'no'
         while accept != 'yes':
             prize = prizes[i]
-            att_index = random.randint(0, len(attendees) - 1)
-            winner = attendees.pop(att_index)
+            winner = attendees.pop(random.randint(0, len(attendees) - 1))
             print('The winner of ' + prize + ' prize is: ' + winner)
             accept = input('accept winner? (yes or no)')
 
